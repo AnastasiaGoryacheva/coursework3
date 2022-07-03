@@ -1,34 +1,40 @@
-from flask import Flask
+from flask import Flask, render_template
+from flask_cors import CORS
 from flask_restx import Api
 
 from project.setup_db import db
-from project.views.auth_view import auth_ns
+from project.views import genres_ns, directors_ns, movies_ns, auth_ns, user_ns
 
-from project.views.director_view import directors_ns
-from project.views.genre_view import genres_ns
-from project.views.movie_view import movies_ns
-from project.views.user_view import user_ns
+
+api = Api(
+    authorizations={
+        "Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}
+    },
+    title="Flask Course Project 3",
+    doc="/docs",
+)
+
+# Нужно для работы с фронтендом
+cors = CORS()
 
 
 def create_app(config_obj):
     app = Flask(__name__)
     app.config.from_object(config_obj)
-    app.app_context().push()
 
-    api = Api(
-        authorizations={
-            "Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}
-        },
-        title="Flask Course Project 3",
-        doc="/docs",
-    )
-    api.init_app(app)
-    api.add_namespace(auth_ns)
-    api.add_namespace(user_ns)
-    api.add_namespace(genres_ns)
-    api.add_namespace(movies_ns)
-    api.add_namespace(directors_ns)
+    @app.route("/")
+    def index():
+        return render_template("index.html")
 
+    cors.init_app(app)
     db.init_app(app)
+    api.init_app(app)
+
+    # Регистрация эндпоинтов
+    api.add_namespace(genres_ns)
+    api.add_namespace(directors_ns)
+    api.add_namespace(movies_ns)
+    api.add_namespace(user_ns)
+    api.add_namespace(auth_ns)
 
     return app
