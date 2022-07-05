@@ -12,7 +12,10 @@ class RegisterView(Resource):
         req_json = request.json
         if not req_json:
             abort(400, 'Bad Request')
-        user = user_service.create(req_json)
+        user = user_service.create(
+                email=req_json["email"],
+                password=req_json["password"]
+            )
         return "", 201, {"location": f"/users/{user.id}"}
 
 

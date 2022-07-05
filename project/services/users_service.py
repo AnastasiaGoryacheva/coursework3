@@ -1,6 +1,6 @@
 from project.dao.user_dao import UsersDAO
 from project.exceptions import ItemNotFound
-from project.utils import compare_passwords, get_hash_by_password
+from project.utils import compare_passwords, get_hash_by_password, generate_user_password
 
 
 class UsersService:
@@ -12,6 +12,10 @@ class UsersService:
         if not user:
             raise ItemNotFound
         return user
+
+    def create(self, email: str, password: str):
+        password_hash = generate_user_password(password)
+        return self.auth_dao.create(email=email, password=password_hash)
 
     def update_partial(self, user_d):
         user = self.get_by_id(user_d["id"])

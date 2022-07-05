@@ -17,6 +17,14 @@ def read_json(filename: str, encoding: str = "utf-8") -> Union[list, dict]:
         return json.load(f)
 
 
+def generate_user_password(self, password):
+    hashed = hashlib.pbkdf2_hmac(hash_name=BaseConfig.HASH_NAME,
+                                 salt=BaseConfig.PWD_HASH_SALT.encode("utf-8"),
+                                 iterations=BaseConfig.PWD_HASH_ITERATIONS,
+                                 password=password.encode("utf-8"))
+    return base64.b64encode(hashed)
+
+
 def get_hash_by_password(password: str):
     hashed = hashlib.pbkdf2_hmac(hash_name=BaseConfig.HASH_NAME,
                                  salt=BaseConfig.PWD_HASH_SALT.encode("utf-8"),
