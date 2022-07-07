@@ -1,5 +1,5 @@
 from project.dao.auth_dao import AuthDAO
-from project.utils import get_hash_by_password, compare_passwords, generate_tokens, generate_new_tokens
+from project.utils import get_hash_by_password, compare_passwords, generate_tokens
 
 
 class AuthService:
@@ -17,6 +17,3 @@ class AuthService:
         if not compare_passwords(user["password"], password):
             raise Exception
         return generate_tokens(user)
-
-    def update_tokens(self, token):
-        return generate_new_tokens(token)

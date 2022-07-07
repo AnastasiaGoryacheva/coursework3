@@ -1,6 +1,6 @@
+from project import utils
 from project.dao.user_dao import UsersDAO
 from project.exceptions import ItemNotFound
-from project.utils import compare_passwords, get_hash_by_password, generate_user_password
 
 
 class UsersService:
@@ -14,8 +14,8 @@ class UsersService:
         return user
 
     def create(self, email: str, password: str):
-        password_hash = generate_user_password(password)
-        return self.auth_dao.create(email=email, password=password_hash)
+        password_hash = utils.generate_user_password(password)
+        return self.user_dao.create(email=email, password=password_hash)
 
     def update_partial(self, user_d):
         user = self.get_by_id(user_d["id"])
@@ -29,10 +29,12 @@ class UsersService:
 
     def update_password(self, user_d):
         user = self.get_by_id(user_d["id"])
-        new_password = get_hash_by_password(user_d.get("new_password"))
+        new_password = utils.get_hash_by_password(user_d.get("new_password"))
         old_password_from_db = user.password
-        if not compare_passwords(old_password_from_db, get_hash_by_password(user_d.get("old_password"))):
+        if not utils.compare_passwords(old_password_from_db, utils.get_hash_by_password(user_d.get("old_password"))):
             raise Exception
         user.password = new_password
         self.user_dao.update(user)
 
+    def get_user_by_email(self, email):
+        return self.user_dao.get_user_by_email(email)

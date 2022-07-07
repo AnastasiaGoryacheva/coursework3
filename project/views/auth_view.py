@@ -1,7 +1,8 @@
 from flask import request, abort
 from flask_restx import Namespace, Resource
 
-from project.container import auth_service, user_service
+from project.container import user_service
+from project.utils import generate_new_tokens, generate_tokens
 
 auth_ns = Namespace('auth')
 
@@ -23,18 +24,18 @@ class RegisterView(Resource):
 class LoginView(Resource):
     def post(self):
         req_json = request.json
-        email = req_json.get("email")
-        password = req_json.get("password")
+        email = req_json.get("email", None)
+        password = req_json.get("password", None)
         if None in (email, password):
             return "", 400
 
-        tokens = auth_service.generate_tokens(email, password)
+        tokens = generate_tokens(email, password)
 
         return tokens, 201
 
     def put(self):
         data = request.json
         token = data.get('refresh_token')
-        tokens = auth_service.approve_refresh_token(token)
+        tokens = generate_new_tokens(token)
 
         return tokens, 201

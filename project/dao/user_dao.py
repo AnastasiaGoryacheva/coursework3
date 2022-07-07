@@ -8,6 +8,9 @@ class UsersDAO(BaseDAO):
         user = self.session.query(User).filter(User.id == uid).one_or_none()
         return user
 
+    def get_user_by_email(self, email):
+        return self.session.query(User).filter(User.email == email).first()
+
     def create(self, email: str, password: str) -> UserSchema:
         new_user = User(
             email=email,

@@ -1,6 +1,5 @@
 from flask import request, abort
 from flask_restx import Namespace, Resource
-from marshmallow import ValidationError
 
 from project.Schemas.user_schema import UserSchema
 from project.container import user_service
