@@ -5,7 +5,7 @@ from project.dao.models.user_model import User
 
 class UsersDAO(BaseDAO):
     def get_by_id(self, uid: int):
-        user = self.session.query(User).filter(User.id == uid).one_or_none()
+        user = self.session.query(User).get(uid)
         return user
 
     def get_user_by_email(self, email):

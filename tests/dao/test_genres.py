@@ -32,9 +32,3 @@ class TestGenresDAO:
 
     def test_get_all_genres(self, genres_dao, genre_1, genre_2):
         assert genres_dao.get_all() == [genre_1, genre_2]
-
-    def test_get_genres_by_page(self, app, genres_dao, genre_1, genre_2):
-        app.config['ITEMS_PER_PAGE'] = 1
-        assert genres_dao.get_all(page=1) == [genre_1]
-        assert genres_dao.get_all(page=2) == [genre_2]
-        assert genres_dao.get_all(page=3) == []

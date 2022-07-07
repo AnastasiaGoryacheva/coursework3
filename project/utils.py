@@ -30,10 +30,12 @@ def generate_user_password(password):
 
 
 def get_hash_by_password(password: str):
-    hashed = hashlib.pbkdf2_hmac(hash_name=BaseConfig.HASH_NAME,
-                                 salt=BaseConfig.PWD_HASH_SALT.encode("utf-8"),
-                                 iterations=BaseConfig.PWD_HASH_ITERATIONS,
-                                 password=password.encode("utf-8"))
+    hashed = hashlib.pbkdf2_hmac(
+        'sha256',
+        password.encode('utf-8'),
+        BaseConfig.PWD_HASH_SALT,
+        BaseConfig.PWD_HASH_ITERATIONS
+    )
     return base64.b64encode(hashed).decode("utf-8")
 
 

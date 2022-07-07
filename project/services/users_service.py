@@ -38,3 +38,4 @@ class UsersService:
 
     def get_user_by_email(self, email):
         return self.user_dao.get_user_by_email(email)
+

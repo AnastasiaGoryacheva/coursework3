@@ -1,5 +1,5 @@
+from project import utils
 from project.dao.auth_dao import AuthDAO
-from project.utils import get_hash_by_password, compare_passwords, generate_tokens
 
 
 class AuthService:
@@ -13,7 +13,7 @@ class AuthService:
         user = self.auth_dao.get_user_by_email(email=email)
         if user is None:
             raise Exception
-        password = get_hash_by_password(password)
-        if not compare_passwords(user["password"], password):
+        password = utils.get_hash_by_password(password)
+        if not utils.compare_passwords(user["password"], password):
             raise Exception
-        return generate_tokens(user)
+        return utils.generate_tokens(user)
